@@ -4,9 +4,8 @@ import com.nia.pojo.hashmap.MHashMap;
 import com.nia.pojo.linkedlist.MLinkedList;
 
 public class DataPersistent {
-    MHashMap<String, String> kvData;
+    MHashMap<String, String> StringData;
     MHashMap<String, MLinkedList<String>> linkedListData;
     MHashMap<String, MHashMap<String, String>> mapData;
-
 
 }
