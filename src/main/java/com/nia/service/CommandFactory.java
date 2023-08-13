@@ -2,8 +2,7 @@ package com.nia.service;
 
 import com.nia.dao.conf.CommandConfigLoader;
 import com.nia.pojo.MMap;
-import com.nia.pojo.hashmap.MHashMap;
-import com.nia.service.concrete_command.errorCommand;
+import com.nia.service.concrete_command.ErrorCommand;
 
 /**
  * 享元工厂对象
@@ -14,7 +13,7 @@ public class CommandFactory {
     private MMap<String, Command> commandMap;
 
     public CommandFactory() {
-        this.commandMap = new MHashMap<>();
+
     }
 
     public Command getCommand(String cmd){
@@ -23,7 +22,7 @@ public class CommandFactory {
         }
         Command command = commandMap.get(cmd);
         if (command == null){
-            return new errorCommand();
+            return new ErrorCommand();
         }
         return command;
     }

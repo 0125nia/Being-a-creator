@@ -6,6 +6,7 @@ import com.nia.service.Command;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.Properties;
 
 public class CommandConfigLoader {
@@ -16,15 +17,17 @@ public class CommandConfigLoader {
      * 加载配置信息
      */
     private static void loadCommandConfig(){
+
         if (isInitialized){
             return;
         }
+        commandsMap = new MHashMap<>();
         Properties properties = new Properties();
         //获取类加载器
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 
         // 读取properties文件内容并初始化Properties对象
-        try (InputStream is = classLoader.getResourceAsStream("config.properties")) {
+        try (InputStream is = classLoader.getResourceAsStream("command.properties")) {
             properties.load(is);
 
             //遍历将命令与类放入map
@@ -45,6 +48,7 @@ public class CommandConfigLoader {
         } catch (IOException e) {
             System.out.println("读取文件失败" + e.getMessage());
         }catch (Exception e){
+            e.printStackTrace();
             System.out.println("配置文件类的读取或创建错误" + e.getMessage());
         }
     }
