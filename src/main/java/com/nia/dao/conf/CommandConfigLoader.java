@@ -3,22 +3,23 @@ package com.nia.dao.conf;
 import com.nia.pojo.hashmap.MHashMap;
 import com.nia.service.Command;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.Properties;
 
+/**
+ * 命令配置文件加载器
+ */
 public class CommandConfigLoader {
-    private static MHashMap<String,Command> commandsMap;    //存储命令以及其对应的具体命令对象的map
+    private static MHashMap<String, Command> commandsMap;    //存储命令以及其对应的具体命令对象的map
     private static boolean isInitialized = false;           //初始化标志
 
     /**
      * 加载配置信息
      */
-    private static void loadCommandConfig(){
+    private static void loadCommandConfig() {
 
-        if (isInitialized){
+        if (isInitialized) {
             return;
         }
         commandsMap = new MHashMap<>();
@@ -47,18 +48,16 @@ public class CommandConfigLoader {
             isInitialized = true;
         } catch (IOException e) {
             System.out.println("读取文件失败" + e.getMessage());
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             System.out.println("配置文件类的读取或创建错误" + e.getMessage());
         }
     }
 
-    public static MHashMap<String,Command> getCommandsMap(){
+    public static MHashMap<String, Command> getCommandsMap() {
         loadCommandConfig();//初始化
         return commandsMap;//返回map
     }
-
-
 
 
 }

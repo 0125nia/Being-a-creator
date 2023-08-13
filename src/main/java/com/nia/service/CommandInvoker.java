@@ -7,12 +7,12 @@ import org.junit.Test;
  * 使用命令的入口
  * 命令模式中的调用者
  */
-public class Invoker {
+public class CommandInvoker {
     //持有命令享元工厂对象
     private CommandFactory factory;
     private MHashMap<String,Command> map;
 
-    public Invoker() {
+    public CommandInvoker() {
         factory = new CommandFactory();
     }
 
