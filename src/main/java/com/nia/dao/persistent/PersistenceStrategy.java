@@ -10,4 +10,6 @@ public interface PersistenceStrategy {
     void save();
 
     Data load();
+
+    void appendCmd(String cmd);
 }

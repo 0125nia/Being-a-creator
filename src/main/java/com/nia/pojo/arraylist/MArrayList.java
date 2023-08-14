@@ -41,6 +41,16 @@ public class MArrayList<T> implements Serializable, MList<T>, Iterable<T> {
     }
 
     /**
+     * 有参构造方法
+     * @param array 数组参数
+     */
+    public MArrayList(T[] array) {
+        size = array.length;//长度为数组长度
+        this.array = array;
+        capacity = (int) (size * 1.5);//容量设置为长度的1.5倍
+    }
+
+    /**
      * 自动扩容方法
      */
     private void AutoExpandCapacity() {

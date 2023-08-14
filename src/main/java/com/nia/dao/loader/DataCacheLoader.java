@@ -1,6 +1,5 @@
-package com.nia.dao.data;
+package com.nia.dao.loader;
 
-import com.nia.dao.conf.ConfigLoader;
 import com.nia.dao.persistent.BinaryStrategy;
 import com.nia.dao.persistent.LogAppendingStrategy;
 import com.nia.dao.persistent.PersistenceContext;
@@ -8,13 +7,13 @@ import com.nia.dao.persistent.PersistenceStrategy;
 import com.nia.pojo.Data;
 
 /**
- * 缓存数据加载器
+ * 数据缓存加载器
  */
-public class DataLoader {
+public class DataCacheLoader {
     //定义静态策略类常量,便于后续其他类调用
-    private static final PersistenceStrategy persistenceStrategy;
+    public static final PersistenceStrategy PERSISTENCESTRATEGY;
     //缓存数据变量
-    private static Data data;
+    private static Data data = new Data();
     //缓存标志
     private static boolean isCached = false;
 
@@ -24,9 +23,9 @@ public class DataLoader {
         String pattern = ConfigLoader.getString("pattern");
         //给常量赋值
         if ("1".equals(pattern)) {
-            persistenceStrategy = new LogAppendingStrategy();
+            PERSISTENCESTRATEGY = new LogAppendingStrategy();
         } else if ("2".equals(pattern)) {
-            persistenceStrategy = new BinaryStrategy();
+            PERSISTENCESTRATEGY = new BinaryStrategy();
         } else {
             throw new RuntimeException("持久化类型参数错误!");
         }
@@ -35,14 +34,16 @@ public class DataLoader {
     /**
      * 加载数据到缓存数据成员变量
      */
-    public static void load() {
-        if (isCached){
+    private static void load() {
+        if (isCached) {
             return;
         }
-        PersistenceContext pc = new PersistenceContext();//创建策略上下文类
-        pc.setStrategy(persistenceStrategy);//设置具体的策略对象
-        data = pc.loadData();//
+        data = PersistenceContext.loadData();//加载数据
         isCached = true;//设置为已缓存
     }
 
+    public static Data getData() {
+        load();
+        return data;
+    }
 }

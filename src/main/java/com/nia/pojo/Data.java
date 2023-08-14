@@ -8,31 +8,33 @@ import com.nia.pojo.linkedlist.MLinkedList;
  */
 public class Data {
     //静态成员变量
-    private static MHashMap<String, String> StringData;
-    private static MHashMap<String, MLinkedList<String>> linkedListData;
-    private static MHashMap<String, MHashMap<String, String>> mapData;
+    private MHashMap<String, String> stringData = new MHashMap<>();
+    private MHashMap<String, MLinkedList<String>> linkedListData = new MHashMap<>();
+    private MHashMap<String, MHashMap<String, String>> mapData = new MHashMap<>();
 
-    public static MHashMap<String, String> getStringData() {
-        return StringData;
+    public Data() {}
+
+    public MHashMap<String, String> getStringData() {
+        return stringData;
     }
 
-    public static void setStringData(MHashMap<String, String> stringData) {
-        StringData = stringData;
+    public void setStringData(MHashMap<String, String> stringData) {
+        this.stringData = stringData;
     }
 
-    public static MHashMap<String, MLinkedList<String>> getLinkedListData() {
+    public MHashMap<String, MLinkedList<String>> getLinkedListData() {
         return linkedListData;
     }
 
-    public static void setLinkedListData(MHashMap<String, MLinkedList<String>> linkedListData) {
-        Data.linkedListData = linkedListData;
+    public void setLinkedListData(MHashMap<String, MLinkedList<String>> linkedListData) {
+        this.linkedListData = linkedListData;
     }
 
-    public static MHashMap<String, MHashMap<String, String>> getMapData() {
+    public MHashMap<String, MHashMap<String, String>> getMapData() {
         return mapData;
     }
 
-    public static void setMapData(MHashMap<String, MHashMap<String, String>> mapData) {
-        Data.mapData = mapData;
+    public void setMapData(MHashMap<String, MHashMap<String, String>> mapData) {
+        this.mapData = mapData;
     }
 }

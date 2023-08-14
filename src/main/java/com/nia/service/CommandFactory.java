@@ -1,6 +1,6 @@
 package com.nia.service;
 
-import com.nia.dao.conf.CommandConfigLoader;
+import com.nia.dao.loader.CommandConfigLoader;
 import com.nia.pojo.MMap;
 import com.nia.service.concrete_command.ErrorCommand;
 
@@ -10,27 +10,27 @@ import com.nia.service.concrete_command.ErrorCommand;
  */
 public class CommandFactory {
 
-    private MMap<String, Command> commandMap;
+    private static MMap<String, Command> commandMap;
 
     /**
      * 返回指令对应的具体命令对象
-     * @param cmd 指令的类型
+     *
+     * @param commandType 指令的类型
      * @return 对应的具体命令对象
      */
-    public Command getCommand(String cmd){
+    public Command getCommand(String commandType) {
         //判断是否初始化
-        if (commandMap == null){
+        if (commandMap == null) {
             initializeCommandMap();
         }
         //获取该指令类型对应在map中存储的具体命令对象
-        Command command = commandMap.get(cmd);
+        Command command = commandMap.get(commandType);
         //判断是否为空,为空则返回新的错误指令结果
-        if (command == null){
+        if (command == null) {
             return new ErrorCommand();
         }
         return command;
     }
-
 
 
     //懒加载数据,从命令配置文件加载器中获取map

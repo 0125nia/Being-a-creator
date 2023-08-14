@@ -1,26 +1,36 @@
-import com.nia.dao.conf.ConfigLoader;
-
-import java.io.BufferedReader;
-import java.io.FileReader;
+import com.nia.dao.persistent.LogAppendingStrategy;
+import com.nia.dao.persistent.PersistenceContext;
+import com.nia.pojo.Data;
+import com.nia.pojo.hashmap.MHashMap;
+import com.nia.pojo.linkedlist.MLinkedList;
+import com.nia.service.Command;
+import com.nia.service.concrete_command.LPushCommand;
 
 public class CommandTest {
     public static void main(String[] args) throws Exception {
 
-        String aof = ConfigLoader.getString("AOF");
+        Data data = new Data();
+        MHashMap<String, MLinkedList<String>> linkedListData = data.getLinkedListData();
+        linkedListData.put("1",new MLinkedList<>());
+        linkedListData.get("1").addFirst("111");
+        Command command = new LPushCommand();
+        command.execute(new String[4],"",data);
 
-        FileReader fr = new FileReader(aof);
+//        String aof = ConfigLoader.getString("AOF");
+//
+//        FileReader fr = new FileReader(aof);
+//
+//        BufferedReader reader = new BufferedReader(fr);
+//
+//        StringBuilder sb = new StringBuilder();
+//
+//        String line;
+//        while ((line = reader.readLine()) != null) {
+//            sb.append(line);
+//        }
 
-        BufferedReader reader = new BufferedReader(fr);
 
-        StringBuilder sb = new StringBuilder();
-
-        String line;
-        while ((line = reader.readLine()) != null) {
-            sb.append(line);
-        }
-
-
-        System.out.println(sb.toString());
+//        System.out.println(sb.toString());
 //        Class<SetCommand> clazz = SetCommand.class;
 //
 //        String name = clazz.getName();
@@ -37,7 +47,6 @@ public class CommandTest {
 
 
     }
-
 
 
 }

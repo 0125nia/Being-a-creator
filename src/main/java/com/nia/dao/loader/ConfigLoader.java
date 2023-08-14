@@ -1,4 +1,4 @@
-package com.nia.dao.conf;
+package com.nia.dao.loader;
 
 
 import java.io.IOException;

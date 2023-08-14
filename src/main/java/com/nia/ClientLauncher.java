@@ -1,7 +1,7 @@
 package com.nia;
 
 import com.nia.client.Client;
-import com.nia.dao.conf.ConfigLoader;
+import com.nia.dao.loader.ConfigLoader;
 
 public class ClientLauncher {
     public static void main(String[] args) {

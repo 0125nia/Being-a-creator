@@ -1,6 +1,6 @@
 package com.nia.reactor;
 
-import com.nia.dao.conf.ConfigLoader;
+import com.nia.dao.loader.ConfigLoader;
 import com.nia.handler.ServerAcceptor;
 import com.nia.handler.ServerReader;
 import com.nia.handler.ServerWriter;

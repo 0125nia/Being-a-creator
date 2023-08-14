@@ -1,10 +1,11 @@
 package com.nia.service.concrete_command;
 
-import com.nia.service.Command;
+import com.nia.pojo.linkedlist.MLinkedList;
 
-public class LPopCommand implements Command {
+public class LPopCommand extends AbstractPopCommand {
+
     @Override
-    public String execute(String cmd) {
-        return null;
+    protected void popFromList(MLinkedList<String> linkedList) {
+        linkedList.removeFirst();
     }
 }

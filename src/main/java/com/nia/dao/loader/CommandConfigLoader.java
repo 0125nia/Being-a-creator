@@ -1,4 +1,4 @@
-package com.nia.dao.conf;
+package com.nia.dao.loader;
 
 import com.nia.pojo.hashmap.MHashMap;
 import com.nia.service.Command;
@@ -12,7 +12,7 @@ import java.util.Properties;
  */
 public class CommandConfigLoader {
     private static MHashMap<String, Command> commandsMap;    //存储命令以及其对应的具体命令对象的map
-    private static boolean isInitialized = false;           //初始化标志
+    private static boolean isInitialized = false;            //初始化标志
 
     /**
      * 加载配置信息
@@ -58,6 +58,5 @@ public class CommandConfigLoader {
         loadCommandConfig();//初始化
         return commandsMap;//返回map
     }
-
 
 }

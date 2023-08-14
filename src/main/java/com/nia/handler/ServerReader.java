@@ -1,6 +1,6 @@
 package com.nia.handler;
 
-import com.nia.dao.conf.ConfigLoader;
+import com.nia.dao.loader.ConfigLoader;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
