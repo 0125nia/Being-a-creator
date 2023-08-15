@@ -7,15 +7,15 @@ import com.nia.pojo.hashmap.MHashMap;
 import com.nia.service.Command;
 
 /**
- * String类型数据的SET指令
+ * set [key] [value]
  */
 public class SetCommand implements Command {
-    private static final int NUM = 3;
+    private static final int SET_CMD_NUM = 3;
 
     @Override
     public String execute(String[] cmd, String cmdStr, Data data) {
         //判断
-        if(!isCorrectCmd(cmd,NUM)){
+        if(!isCorrectCmd(cmd, SET_CMD_NUM)){
             return new ErrorCommand().execute(cmd, cmdStr, data);
         }
         //对字符串数据进行操作

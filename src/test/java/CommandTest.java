@@ -1,20 +1,20 @@
-import com.nia.dao.persistent.LogAppendingStrategy;
-import com.nia.dao.persistent.PersistenceContext;
-import com.nia.pojo.Data;
 import com.nia.pojo.hashmap.MHashMap;
 import com.nia.pojo.linkedlist.MLinkedList;
-import com.nia.service.Command;
-import com.nia.service.concrete_command.LPushCommand;
 
 public class CommandTest {
     public static void main(String[] args) throws Exception {
 
-        Data data = new Data();
-        MHashMap<String, MLinkedList<String>> linkedListData = data.getLinkedListData();
-        linkedListData.put("1",new MLinkedList<>());
-        linkedListData.get("1").addFirst("111");
-        Command command = new LPushCommand();
-        command.execute(new String[4],"",data);
+        MLinkedList<String> linkedList = new MLinkedList<>();
+        MHashMap<String, MLinkedList<String>> map = new MHashMap<>();
+        MLinkedList<String> linkedList1 = map.get("1");
+        System.out.println(linkedList1);
+
+//        Data data = new Data();
+//        MHashMap<String, MLinkedList<String>> linkedListData = data.getLinkedListData();
+//        linkedListData.put("1",new MLinkedList<>());
+//        linkedListData.get("1").addFirst("111");
+//        Command command = new LPushCommand();
+//        command.execute(new String[4],"",data);
 
 //        String aof = ConfigLoader.getString("AOF");
 //

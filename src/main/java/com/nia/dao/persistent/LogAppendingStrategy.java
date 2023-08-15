@@ -25,6 +25,7 @@ public class LogAppendingStrategy implements PersistenceStrategy {
     private static final Path path = Path.of(ConfigLoader.getString("AOF"));//根据文件路径创建Path对象
     private static boolean isDataLoaded = false;
 
+
     /**
      * 将新的指令存放到集合中
      *

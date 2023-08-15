@@ -1,5 +1,6 @@
 package com.nia.pojo;
 
+import com.nia.pojo.arraylist.MArrayList;
 import com.nia.pojo.hashmap.MHashMap;
 import com.nia.pojo.linkedlist.MLinkedList;
 
@@ -7,8 +8,8 @@ import com.nia.pojo.linkedlist.MLinkedList;
  * 数据缓存类
  */
 public class Data {
-    //静态成员变量
     private MHashMap<String, String> stringData = new MHashMap<>();
+    private MHashMap<String, MArrayList<String>> listData = new MHashMap<>();
     private MHashMap<String, MLinkedList<String>> linkedListData = new MHashMap<>();
     private MHashMap<String, MHashMap<String, String>> mapData = new MHashMap<>();
 
@@ -36,5 +37,13 @@ public class Data {
 
     public void setMapData(MHashMap<String, MHashMap<String, String>> mapData) {
         this.mapData = mapData;
+    }
+
+    public MHashMap<String, MArrayList<String>> getListData() {
+        return listData;
+    }
+
+    public void setListData(MHashMap<String, MArrayList<String>> listData) {
+        this.listData = listData;
     }
 }

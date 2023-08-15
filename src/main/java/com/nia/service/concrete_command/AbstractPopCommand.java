@@ -5,9 +5,13 @@ import com.nia.pojo.Data;
 import com.nia.pojo.ResponseMsg;
 import com.nia.pojo.hashmap.MHashMap;
 import com.nia.pojo.linkedlist.MLinkedList;
-import com.nia.service.Command;
 
-public abstract class AbstractPopCommand implements Command {
+/**
+ * 链表数据pop命令操作的抽象父类
+ * lpop [key]
+ * rpop [key]
+ */
+public abstract class AbstractPopCommand implements AbstractLinkedListCommand {
     private static final int POP_CMD_NUM = 2;//链表push指令的指令数
 
     @Override
@@ -22,13 +26,11 @@ public abstract class AbstractPopCommand implements Command {
         if (linkedList == null || linkedList.isEmpty()) {
             return ResponseMsg.FAIL;
         }
-        popFromList(linkedList);
+        String s = popFromList(linkedList);
         //追加指令到日志文件中
         PersistenceContext.appendCmd(cmdStr);
-        return ResponseMsg.SUCCESS;
+        return s;//返回删除的元素
     }
-
-    protected abstract void popFromList(MLinkedList<String> linkedList);
-
-
+    //pop抽象方法
+    protected abstract String popFromList(MLinkedList<String> linkedList);
 }

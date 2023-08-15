@@ -1,5 +1,9 @@
 package com.nia.handler;
 
+import com.nia.dao.loader.DataCacheLoader;
+import com.nia.pojo.Data;
+import com.nia.service.CommandInvoker;
+
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectableChannel;
@@ -8,6 +12,8 @@ import java.nio.channels.SocketChannel;
 import java.nio.charset.StandardCharsets;
 
 public class ServerWriter implements Handler{
+    private static final CommandInvoker invoker = new CommandInvoker();
+
     String resp = "无数据";
 
     @Override
@@ -18,7 +24,8 @@ public class ServerWriter implements Handler{
         }
 
         SocketChannel socketChannel = (SocketChannel) sk.channel();
-
+        Data data = DataCacheLoader.getData();
+        resp = invoker.executeCommand(msg, data,true);
         socketChannel.write(ByteBuffer.wrap(resp.getBytes(StandardCharsets.UTF_8)));
         socketChannel.register(sk.selector(), SelectionKey.OP_READ);
     }

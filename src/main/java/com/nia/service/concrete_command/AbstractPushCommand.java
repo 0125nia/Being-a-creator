@@ -5,12 +5,13 @@ import com.nia.pojo.Data;
 import com.nia.pojo.ResponseMsg;
 import com.nia.pojo.hashmap.MHashMap;
 import com.nia.pojo.linkedlist.MLinkedList;
-import com.nia.service.Command;
 
 /**
  * 链表数据push命令操作的抽象父类
+ * rpush [key] [value]
+ * lpush [key] [value]
  */
-public abstract class AbstractPushCommand implements Command {
+public abstract class AbstractPushCommand implements AbstractLinkedListCommand {
     private static final int PUSH_CMD_NUM = 3;//链表push指令的指令数
 
     @Override
@@ -33,26 +34,11 @@ public abstract class AbstractPushCommand implements Command {
 
     /**
      * 抽象方法 添加元素到链表
+     *
      * @param linkedList 对应链表
-     * @param value 需要添加的元素
+     * @param value      需要添加的元素
      */
     protected abstract void pushToList(MLinkedList<String> linkedList, String value);
-
-    /**
-     * 判断存储链表数据的map中key对应的链表进行非空处理
-     * @param linkedListData 存储链表数据的map
-     * @param key 获取链表的key
-     * @return 返回key对应处理后的链表
-     */
-    protected  MLinkedList<String> getLinkedList(MHashMap<String, MLinkedList<String>> linkedListData, String key){
-        MLinkedList<String> linkedList = linkedListData.get(key);
-        //若为空则创建链表对象
-        if (linkedList==null){
-            linkedList = new MLinkedList<>();
-            linkedListData.put(key,linkedList);
-        }
-        return linkedList;
-    }
 
 
 }

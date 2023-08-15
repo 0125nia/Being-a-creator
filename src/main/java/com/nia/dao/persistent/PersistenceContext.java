@@ -21,4 +21,8 @@ public class PersistenceContext {
     public static void appendCmd(String cmd){
         strategy.appendCmd(cmd);
     }
+
+    public static void bgSaveData() {
+        new Thread(PersistenceContext::saveData).start();
+    }
 }
