@@ -7,8 +7,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
 
-public class ServerReader implements Handler{
-
+public class ServerReader implements Handler {
 
 
     @Override
@@ -27,11 +26,11 @@ public class ServerReader implements Handler{
             if (count > 0) {
                 buf.flip();
                 String msg = new String(buf.array(), 0, buf.remaining());
-                System.out.println("接收到信息 "+socketChannel.getRemoteAddress() + " : " + msg);
-                socketChannel.register(sk.selector(),SelectionKey.OP_WRITE,msg);
+                System.out.println("接收到信息 " + socketChannel.getRemoteAddress() + " : " + msg);
+                socketChannel.register(sk.selector(), SelectionKey.OP_WRITE, msg);
             }
 
-        }catch (NumberFormatException | NullPointerException e){
+        } catch (NumberFormatException | NullPointerException e) {
             System.out.println("配置参数错误!请检查!");
         } catch (IOException e) {
             try {

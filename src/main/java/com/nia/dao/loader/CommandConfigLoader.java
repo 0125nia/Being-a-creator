@@ -14,6 +14,8 @@ public class CommandConfigLoader {
     private static MHashMap<String, Command> commandsMap;    //存储命令以及其对应的具体命令对象的map
     private static boolean isInitialized = false;            //初始化标志
 
+    //私有化构造器
+    private CommandConfigLoader(){}
     /**
      * 加载配置信息
      */
@@ -36,7 +38,6 @@ public class CommandConfigLoader {
                 String className = properties.getProperty(commandName);
                 //加载具体命令对象
                 Class<?> commandClass = Class.forName(className);
-
                 //创建具体命令对象实例
                 Command command = (Command) commandClass.getDeclaredConstructor().newInstance();
 

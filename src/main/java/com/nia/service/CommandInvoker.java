@@ -23,9 +23,11 @@ public class CommandInvoker {
      * @param data 指令执行的数据对象
      * @param flag 是否对客户端进行响应
      */
-    public String  executeCommand(String cmd, Data data, boolean flag) {
+    public String executeCommand(String cmd, Data data, boolean flag) {
         String[] cmdArr = cmd.split(" ");
+
         String cmdType = cmdArr[0].toUpperCase();
+
         Command command = factory.getCommand(cmdType);
 
         String result = command.execute(cmdArr, cmd, data);

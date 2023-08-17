@@ -33,7 +33,7 @@ public class LogAppendingStrategy implements PersistenceStrategy {
      */
     @Override
     public void appendCmd(String cmd) {
-        if (!isDataLoaded){
+        if (!isDataLoaded) {
             return;
         }
         // ISO-8601 规范定义的日期格式"yyyy-MM-dd'T'HH:mm:ss"
@@ -84,39 +84,63 @@ public class LogAppendingStrategy implements PersistenceStrategy {
         //创建Data对象
         Data data = new Data();
         //存放日志文件内容的字符串
-        String commands = "";
+        //判断文件是否存在
         if (!Files.exists(path)) {
+            //若不存在则直接返回
             return data;
         }
         //获取FileChannel
         try (FileChannel channel = FileChannel.open(path, StandardOpenOption.READ, StandardOpenOption.CREATE)) {
-            //读取数据
-            ByteBuffer buf = ByteBuffer.allocate((int) channel.size());
-            int bytesRead = channel.read(buf);
-            if (bytesRead > 0) {
-                //将缓冲区切换到读模式
-                buf.flip();
-                byte[] bytes = new byte[buf.remaining()];
-                buf.get(bytes);
-                commands = new String(bytes);
-                buf.clear();
-            }
+            //读取日志文件中的指令
+            String commands = getCommands(channel);
             //判断读取的字符串是否只含有空格或为空
             if (!commands.trim().isEmpty()) {
                 String[] split = commands.split("\n");
                 //使用Stream流对数据中的数据进行处理
-                String[] commandArray = Arrays.stream(split).
-                        map(s -> s.substring(s.indexOf("]") + 2)).
-                        toArray(String[]::new);
+                String[] commandArray = processCommands(split);
                 data = executeCmd(commandArray);
             }
-
-
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+
         return data;
+    }
+
+    /**
+     * 获取文件中的指令
+     *
+     * @param channel FileChannel
+     * @return 返回读取到的指令
+     * @throws IOException 抛出异常
+     */
+    private String getCommands(FileChannel channel) throws IOException {
+        String commands = "";
+        //读取数据
+        ByteBuffer buf = ByteBuffer.allocate((int) channel.size());
+        int bytesRead = channel.read(buf);
+        if (bytesRead > 0) {
+            //将缓冲区切换到读模式
+            buf.flip();
+            byte[] bytes = new byte[buf.remaining()];
+            buf.get(bytes);
+            commands = new String(bytes);
+            buf.clear();
+        }
+        return commands;
+    }
+
+    /**
+     * 处理命令数组
+     *
+     * @param split 由换行符分隔的命令数组
+     * @return 去除多余字符处理后的结果
+     */
+    private String[] processCommands(String[] split) {
+        return Arrays.stream(split).
+                map(s -> s.substring(s.indexOf("]") + 2)).
+                toArray(String[]::new);
     }
 
     /**

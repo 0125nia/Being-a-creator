@@ -10,7 +10,7 @@ import com.nia.service.Command;
  * range [key] [start] [end]
  */
 public class RangeCommand implements AbstractLinkedListCommand {
-    private static final int RANGE_CMD_NUM = 2;//链表len的指令数
+    private static final int RANGE_CMD_NUM = 4;//链表len的指令数
 
     @Override
     public String execute(String[] cmd, String cmdStr, Data data) {
@@ -27,7 +27,7 @@ public class RangeCommand implements AbstractLinkedListCommand {
 
     private String getRange(MLinkedList<String> linkedList, int start, int end){
         int size = linkedList.size();//链表的实际长度
-        if (linkedList.size() < start || end > start){
+        if (linkedList.size() < start || end < start){
             return ResponseMsg.INDEX_ERROR;
         }
         //使用StringBuilder拼接遍历结果

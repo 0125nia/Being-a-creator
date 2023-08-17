@@ -13,6 +13,7 @@ public class HSetCommand implements AbstractHashMapCommand {
 
     @Override
     public String execute(String[] cmd, String cmdStr, Data data) {
+        System.out.println("Hset");
         if (!isCorrectCmd(cmd, HSET_CMD_NUM)) {
             return new ErrorCommand().execute(cmd, cmdStr, data);
         }

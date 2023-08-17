@@ -4,10 +4,12 @@ import com.nia.pojo.arraylist.MArrayList;
 import com.nia.pojo.hashmap.MHashMap;
 import com.nia.pojo.linkedlist.MLinkedList;
 
+import java.io.Serializable;
+
 /**
  * 数据缓存类
  */
-public class Data {
+public class Data implements Serializable {
     private MHashMap<String, String> stringData = new MHashMap<>();
     private MHashMap<String, MArrayList<String>> listData = new MHashMap<>();
     private MHashMap<String, MLinkedList<String>> linkedListData = new MHashMap<>();

@@ -44,6 +44,7 @@ public class ClientReader implements Handler {
         String msg = sc.nextLine();
         ByteBuffer buffer = ByteBuffer.wrap(msg.getBytes());
         channel.write(buffer);
+        buffer.clear();
     }
 
 }

@@ -82,7 +82,7 @@ public class MHashMap<K, V> implements MMap<K, V> , Serializable {
     }
 
 
-    private static class MEntry<K, V> implements MMap.MEntry<K,V>{
+    private static class MEntry<K, V> implements MMap.MEntry<K,V>,Serializable{
         private K key;
         private V value;
 

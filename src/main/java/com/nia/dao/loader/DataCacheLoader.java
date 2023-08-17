@@ -16,6 +16,8 @@ public class DataCacheLoader {
     private static Data data = new Data();
     //缓存标志
     private static boolean isCached = false;
+    //私有化构造器
+    private DataCacheLoader(){}
 
     //静态代码块,判断持久化类型
     static {
