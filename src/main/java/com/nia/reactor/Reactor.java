@@ -4,6 +4,8 @@ import com.nia.dao.loader.ConfigLoader;
 import com.nia.handler.ServerAcceptor;
 import com.nia.handler.ServerReader;
 import com.nia.handler.ServerWriter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -17,14 +19,30 @@ import java.util.Iterator;
  */
 public class Reactor {
 
+    public static final Logger LOGGER = LoggerFactory.getLogger("Reactor");
     //定义通道和选择器
     private Selector selector;
     private ServerSocketChannel serverSocketChannel;
 
+    private static Reactor instance;  // 私有静态成员变量，用于保存单例对象
+    //构造器私有
+    private Reactor() {
+        init();
+    }
+
     /**
-     * 构造器
+     * 线程安全懒汉式单例模式
+     * @return 返回实例对象
      */
-    public Reactor() {
+    public static synchronized Reactor getInstance(){
+        //判断是否为null
+        if (instance == null){
+            instance = new Reactor();
+        }
+        return instance;
+    }
+
+    private void init() {
         final int PORT;
         try {
             //加载端口号
@@ -41,11 +59,11 @@ public class Reactor {
             serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
 
         } catch (NumberFormatException | NullPointerException e) {
-            System.out.println("配置参数错误!请检查!");
+            LOGGER.error("端口配置参数获取错误!");
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("服务端初始化完毕");
+        LOGGER.info("服务端初始化完毕");
     }
 
 
@@ -64,7 +82,7 @@ public class Reactor {
                         new ServerAcceptor().handle(sk);
                     } else if (sk.isReadable()) { // 处理读事件
                         new ServerReader().handle(sk);
-                    }else if (sk.isWritable()){
+                    } else if (sk.isWritable()) {
                         new ServerWriter().handle(sk);
                     }
                     //处理完毕移除该事件

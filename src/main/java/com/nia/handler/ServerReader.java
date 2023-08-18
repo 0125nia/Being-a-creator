@@ -1,6 +1,7 @@
 package com.nia.handler;
 
 import com.nia.dao.loader.ConfigLoader;
+import com.nia.reactor.Reactor;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -35,7 +36,7 @@ public class ServerReader implements Handler {
         } catch (IOException e) {
             try {
                 // 客户端离线，关闭连接
-                System.out.println(socketChannel.getRemoteAddress() + "离线了");
+                Reactor.LOGGER.info(socketChannel.getRemoteAddress() + "离线了");
                 sk.cancel();
                 socketChannel.close();
             } catch (IOException ioException) {

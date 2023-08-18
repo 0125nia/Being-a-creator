@@ -1,8 +1,7 @@
-package com.nia.service.concrete_command;
+package com.nia.command;
 
 import com.nia.pojo.hashmap.MHashMap;
 import com.nia.pojo.linkedlist.MLinkedList;
-import com.nia.service.Command;
 
 public interface AbstractLinkedListCommand extends Command {
 

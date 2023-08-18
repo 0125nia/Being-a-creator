@@ -1,4 +1,4 @@
-package com.nia.service;
+package com.nia.command;
 
 import com.nia.pojo.Data;
 

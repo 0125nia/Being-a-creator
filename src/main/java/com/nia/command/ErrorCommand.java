@@ -1,8 +1,7 @@
-package com.nia.service.concrete_command;
+package com.nia.command;
 
 import com.nia.pojo.Data;
 import com.nia.pojo.ResponseMsg;
-import com.nia.service.Command;
 
 public class ErrorCommand implements Command {
     @Override

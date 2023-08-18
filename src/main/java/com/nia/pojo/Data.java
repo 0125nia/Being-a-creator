@@ -7,7 +7,7 @@ import com.nia.pojo.linkedlist.MLinkedList;
 import java.io.Serializable;
 
 /**
- * 数据缓存类
+ * 数据类
  */
 public class Data implements Serializable {
     private MHashMap<String, String> stringData = new MHashMap<>();

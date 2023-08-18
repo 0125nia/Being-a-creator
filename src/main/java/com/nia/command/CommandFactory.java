@@ -1,8 +1,7 @@
-package com.nia.service;
+package com.nia.command;
 
 import com.nia.dao.loader.CommandConfigLoader;
 import com.nia.pojo.MMap;
-import com.nia.service.concrete_command.ErrorCommand;
 
 /**
  * 享元工厂对象

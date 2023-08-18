@@ -1,4 +1,4 @@
-package com.nia.service.concrete_command;
+package com.nia.command;
 
 import com.nia.pojo.linkedlist.MLinkedList;
 

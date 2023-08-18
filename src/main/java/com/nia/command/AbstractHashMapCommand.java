@@ -1,7 +1,6 @@
-package com.nia.service.concrete_command;
+package com.nia.command;
 
 import com.nia.pojo.hashmap.MHashMap;
-import com.nia.service.Command;
 
 public interface AbstractHashMapCommand extends Command {
 

@@ -2,7 +2,7 @@ package com.nia.handler;
 
 import com.nia.dao.loader.DataCacheLoader;
 import com.nia.pojo.Data;
-import com.nia.service.CommandInvoker;
+import com.nia.command.CommandInvoker;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;

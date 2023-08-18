@@ -25,11 +25,11 @@ public class ConfigLoader {
         } catch (IOException e) {
             System.out.println("配置文件加载失败: " + e.getMessage());
         }
-
     }
 
     /**
      * 获取参数值
+     *
      * @param key 参数名
      * @return 返回参数名对应的字符串参数值
      */
@@ -43,22 +43,12 @@ public class ConfigLoader {
 
     /**
      * 将配置文件中获取到的字符串参数值转化为Int类型并返回
+     *
      * @param key 参数名
      * @return 返回Int类型参数值
      */
     public static int getInt(String key) {
         return Integer.parseInt(getString(key));
-    }
-
-    /**
-     * 获取配置文件的键值对对象
-     * @return 返回键值对对象
-     */
-    public static Properties getProperties() {
-        if (!properties.isEmpty()) {
-            return properties;
-        }
-        throw new NullPointerException("加载配置文件失败!");
     }
 
 

@@ -8,7 +8,7 @@ import com.nia.reactor.Reactor;
 public class DataBase {
     public static void main(String[] args) {
         //创建Reactor
-        Reactor reactor = new Reactor();
+        Reactor reactor = Reactor.getInstance();
         //开启Reactor
         reactor.start();
 

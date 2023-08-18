@@ -1,5 +1,7 @@
 package com.nia.handler;
 
+import com.nia.reactor.Reactor;
+
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
@@ -16,7 +18,7 @@ public class ServerAcceptor implements Handler{
         //获取连接的SocketChannel
         SocketChannel accept = serverChannel.accept();
         //打印接入客户端的信息
-        System.out.println("接收到连接:" + accept.socket().getRemoteSocketAddress());
+        Reactor.LOGGER.info("接收到连接:" + accept.socket().getRemoteSocketAddress());
         //设置为非阻塞模式
         accept.configureBlocking(false);
 

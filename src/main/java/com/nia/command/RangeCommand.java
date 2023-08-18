@@ -1,10 +1,9 @@
-package com.nia.service.concrete_command;
+package com.nia.command;
 
 import com.nia.pojo.Data;
 import com.nia.pojo.ResponseMsg;
 import com.nia.pojo.hashmap.MHashMap;
 import com.nia.pojo.linkedlist.MLinkedList;
-import com.nia.service.Command;
 
 /**
  * range [key] [start] [end]

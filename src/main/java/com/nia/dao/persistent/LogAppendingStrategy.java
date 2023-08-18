@@ -3,7 +3,7 @@ package com.nia.dao.persistent;
 import com.nia.dao.loader.ConfigLoader;
 import com.nia.pojo.Data;
 import com.nia.pojo.arraylist.MArrayList;
-import com.nia.service.CommandInvoker;
+import com.nia.command.CommandInvoker;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;

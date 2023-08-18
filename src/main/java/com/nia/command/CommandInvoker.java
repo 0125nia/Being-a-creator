@@ -1,4 +1,4 @@
-package com.nia.service;
+package com.nia.command;
 
 import com.nia.pojo.Data;
 
@@ -24,7 +24,8 @@ public class CommandInvoker {
      * @param flag 是否对客户端进行响应
      */
     public String executeCommand(String cmd, Data data, boolean flag) {
-        String[] cmdArr = cmd.split(" ");
+        //去掉空白字符
+        String[] cmdArr = cmd.split("\\s+");
 
         String cmdType = cmdArr[0].toUpperCase();
 

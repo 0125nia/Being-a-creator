@@ -1,4 +1,4 @@
-package com.nia.service.concrete_command;
+package com.nia.command;
 
 import com.nia.dao.persistent.PersistenceContext;
 import com.nia.pojo.Data;
