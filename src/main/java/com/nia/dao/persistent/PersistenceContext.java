@@ -1,7 +1,6 @@
 package com.nia.dao.persistent;
 
 import com.nia.dao.loader.ConfigLoader;
-import com.nia.pojo.Data;
 import com.nia.reactor.Reactor;
 
 /**
@@ -32,9 +31,9 @@ public class PersistenceContext {
         Reactor.LOGGER.info("save data");
     }
 
-    public static Data loadData() {
+    public static void loadData() {
         Reactor.LOGGER.info("load data");
-        return PERSISTENCESTRATEGY.load();
+//        return PERSISTENCESTRATEGY.load();
     }
 
     public static void appendCmd(String cmd) {

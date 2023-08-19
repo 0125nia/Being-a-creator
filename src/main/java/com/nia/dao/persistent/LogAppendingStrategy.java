@@ -80,14 +80,14 @@ public class LogAppendingStrategy implements PersistenceStrategy {
     }
 
     @Override
-    public Data load() {
+    public void load() {
         //创建Data对象
         Data data = new Data();
         //存放日志文件内容的字符串
         //判断文件是否存在
         if (!Files.exists(path)) {
             //若不存在则直接返回
-            return data;
+//            return data;
         }
         //获取FileChannel
         try (FileChannel channel = FileChannel.open(path, StandardOpenOption.READ, StandardOpenOption.CREATE)) {
@@ -105,7 +105,7 @@ public class LogAppendingStrategy implements PersistenceStrategy {
         }
 
 
-        return data;
+//        return data;
     }
 
     /**

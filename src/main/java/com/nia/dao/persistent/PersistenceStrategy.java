@@ -9,7 +9,7 @@ public interface PersistenceStrategy {
 
     void save();
 
-    Data load();
+    void load();
 
     void appendCmd(String cmd);
 }

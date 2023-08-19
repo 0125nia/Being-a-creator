@@ -1,6 +1,5 @@
 package com.nia.handler;
 
-import com.nia.dao.loader.DataCacheLoader;
 import com.nia.pojo.Data;
 import com.nia.command.CommandInvoker;
 
@@ -12,7 +11,8 @@ import java.nio.charset.StandardCharsets;
 
 public class ServerWriter implements Handler {
     private static CommandInvoker invoker;
-    private static Data data = DataCacheLoader.getData();
+//    private static Data data = DataCacheLoader.getData();
+    private static Data data = new Data();
 
     public ServerWriter() {
         invoker = new CommandInvoker();

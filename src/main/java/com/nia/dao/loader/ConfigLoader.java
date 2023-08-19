@@ -8,10 +8,13 @@ import java.util.Properties;
  * 配置文件加载器
  */
 public class ConfigLoader {
+
+
     private static Properties properties;
 
     //私有化对象,拒绝外界创建
-    private ConfigLoader() {}
+    private ConfigLoader() {
+    }
 
     static {
         try {
