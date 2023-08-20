@@ -26,21 +26,24 @@ public class PersistenceContext {
         }
     }
 
+
     public static void saveData() {
         PERSISTENCESTRATEGY.save();
-        Reactor.LOGGER.info("save data");
     }
 
-    public static void loadData() {
-        Reactor.LOGGER.info("load data");
+    //读取数据写入缓存
+    public static<V> V loadData(String key) {
+        Reactor.LOGGER.info("load data");//加载数据
 //        return PERSISTENCESTRATEGY.load();
+        return null;
     }
 
-    public static void appendCmd(String cmd) {
-        PERSISTENCESTRATEGY.appendCmd(cmd);
+    public static void appendToStrategy(String cmd, byte sign) {
+        PERSISTENCESTRATEGY.appendQueue(cmd, sign);
     }
 
     public static void bgSaveData() {
-        new Thread(PersistenceContext::saveData).start();
+        new Thread(PERSISTENCESTRATEGY::save).start();
+        Reactor.LOGGER.info("bgsave data");//将bgsave操作写入日志
     }
 }

@@ -8,11 +8,10 @@ import com.nia.pojo.linkedlist.MLinkedList;
  * 缓存池
  */
 public class Cache {
-    private static final int DEFAULTEXPIRATIONTIME = ConfigLoader.getInt("time");   //默认过期时间
-    private static final int CACHECAPACITY = ConfigLoader.getInt("capacity");  //缓存容量
-    public static MLinkedList<String> keyList;   //存放key的链表
-    private MMap<String, CacheObject<?>> cacheMap;  //缓存数据存储
-
+    private static final int DEFAULT_EXPIRATION_TIME = ConfigLoader.getInt("time");   //默认过期时间
+    private static final int MAX_CAPACITY = ConfigLoader.getInt("capacity");   //缓存池最大容量
+    private static MLinkedList<String> keyList;   //存放key的链表
+    private static MMap<String, CacheObject<?>> cacheMap;  //缓存数据存储
     /**
      * 为了防止在多线程的情况下由于JVM在实例化对象时会优化和指令重排序操作
      * 可能导致出现空指针异常的情况
@@ -47,7 +46,7 @@ public class Cache {
     //写入缓存
     public <V> void put(String key, V value) {
         //默认过期时间
-        put(key, value, DEFAULTEXPIRATIONTIME);
+        put(key, value, DEFAULT_EXPIRATION_TIME);
     }
 
     //写入缓存,设置过期时间
@@ -58,7 +57,7 @@ public class Cache {
     }
 
     // 从缓存中获取指定键的值
-    public synchronized <V> V get(String key) throws NullPointerException {
+    public synchronized <V> V get(String key) {
         CacheObject<?> cacheObject = cacheMap.get(key);
         //判断该对象是否存在且是否过期
         if (cacheObject != null && !cacheObject.isExpired()) {
@@ -69,7 +68,7 @@ public class Cache {
     }
 
     //设置过期时间
-    public synchronized <V> void setExpirationTime(String key, long expirationTime) throws NullPointerException {
+    public synchronized <V> void setExpirationTime(String key, long expirationTime) {
         CacheObject<?> cacheObject = cacheMap.get(key);
         if (cacheObject == null) {
             throw new NullPointerException();
@@ -79,7 +78,7 @@ public class Cache {
     }
 
     //查看过期时间
-    public synchronized long deadline(String key) throws NullPointerException {
+    public synchronized long deadline(String key) {
         CacheObject<?> cacheObject = cacheMap.get(key);
         //判断是否存在
         if (cacheObject == null) {
@@ -98,24 +97,30 @@ public class Cache {
             return;
         }
         keyList.addFirst(key);//将key放到列表的最前面
-        //判断key的数量是否超过缓存容量
+        //判断map中的key是否过期
         for (int i = 0; i < keyList.size(); i++) {
             String k = keyList.get(i);
-            //判断是否超出容量
-            if (keyList.size() > CACHECAPACITY) {
-                String lastKey = keyList.removeLast();//将最后的key从key列表移除
-                remove(lastKey);//获取到最后的key,从缓存map中移除
-            }
             //判断是否过期
             if (cacheMap.get(k).isExpired()) {
                 remove(k);
             }
         }
+        //判断是否超出容量
+        while (cacheMap.size() > MAX_CAPACITY){
+            String lastKey = keyList.removeLast();
+            cacheMap.remove(lastKey);
+        }
     }
 
     //移除key
-    private void remove(String key) {
-        cacheMap.remove(key);
+    public <V> V remove(String key) {
+        CacheObject<?> remove = cacheMap.remove(key);
+        return (V) remove;
+    }
+
+    //判断是否含有该key
+    public boolean containKey(String key) {
+        return cacheMap.containsKey(key);
     }
 
     //清除缓存

@@ -1,9 +1,11 @@
 package com.nia.dao.persistent;
 
-import com.nia.dao.loader.ConfigLoader;
-import com.nia.pojo.Data;
-import com.nia.pojo.arraylist.MArrayList;
 import com.nia.command.CommandInvoker;
+import com.nia.dao.loader.ConfigLoader;
+import com.nia.pojo.MMap;
+import com.nia.pojo.arraylist.MArrayList;
+import com.nia.pojo.hashmap.MHashMap;
+import com.nia.reactor.Reactor;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -21,27 +23,35 @@ import java.util.Arrays;
  */
 public class LogAppendingStrategy implements PersistenceStrategy {
 
-    private static MArrayList<String> commandsList = new MArrayList<>();//存放追加指令的集合
+    public static MHashMap<String, MArrayList<String>> commandsList = new MHashMap<>();//存放追加指令的集合
     private static final Path path = Path.of(ConfigLoader.getString("AOF"));//根据文件路径创建Path对象
-    private static boolean isDataLoaded = false;
 
 
     /**
      * 将新的指令存放到集合中
      *
      * @param cmd 追加的指令
+     * @param sign 数据类型标识
      */
     @Override
-    public void appendCmd(String cmd) {
-        if (!isDataLoaded) {
-            return;
-        }
+    public void appendQueue(String cmd, byte sign) {
+        String key = cmd.split("\\s+")[1];
+
         // ISO-8601 规范定义的日期格式"yyyy-MM-dd'T'HH:mm:ss"
         String time = LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-        cmd = "[" + time + "] " + cmd;
+        cmd = sign + "$" + key + "[" + time + "] " + cmd;
         //处理后的指令存放到集合中
-        commandsList.add(cmd);
+        MArrayList<String> list = commandsList.get(key);
+        if (list == null) {
+            list = new MArrayList<>();
+            list.add(cmd);
+            commandsList.put(key, list);
+        } else {
+            list.add(cmd);
+        }
+
     }
+
 
     /**
      * 将集合中的字符串整合成一个字符串
@@ -51,8 +61,11 @@ public class LogAppendingStrategy implements PersistenceStrategy {
     private String commandsListToStr() {
         StringBuilder sb = new StringBuilder();
         //遍历,插入\n换行符
-        for (String cmd : commandsList) {
-            sb.append(cmd).append("\n");
+        for (MMap.MEntry<String, MArrayList<String>> entry : commandsList) {
+            MArrayList<String> list = entry.getValue();
+            for (String cmd : list) {
+                sb.append(cmd).append("\n");
+            }
         }
         return sb.toString();
     }
@@ -73,21 +86,22 @@ public class LogAppendingStrategy implements PersistenceStrategy {
             ByteBuffer buf = ByteBuffer.wrap(commands.getBytes(StandardCharsets.UTF_8));
             //写入文件
             fileChannel.write(buf);
+            //清空map
+            commandsList = new MHashMap<>();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        Reactor.LOGGER.info("save data");//将save操作写入日志
     }
 
+
     @Override
-    public void load() {
-        //创建Data对象
-        Data data = new Data();
+    public <V> void load(String key) {
         //存放日志文件内容的字符串
         //判断文件是否存在
         if (!Files.exists(path)) {
-            //若不存在则直接返回
-//            return data;
+            //若不存在则直接抛出空指针异常
+            throw new NullPointerException();
         }
         //获取FileChannel
         try (FileChannel channel = FileChannel.open(path, StandardOpenOption.READ, StandardOpenOption.CREATE)) {
@@ -95,17 +109,32 @@ public class LogAppendingStrategy implements PersistenceStrategy {
             String commands = getCommands(channel);
             //判断读取的字符串是否只含有空格或为空
             if (!commands.trim().isEmpty()) {
-                String[] split = commands.split("\n");
+                String[] keyCommands = getKeyCommands(commands, key);
                 //使用Stream流对数据中的数据进行处理
-                String[] commandArray = processCommands(split);
-                data = executeCmd(commandArray);
+                String[] commandArray = processCommands(keyCommands);
+                //写入缓存
+                executeCmd(commandArray);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
-
-//        return data;
+    private String[] getKeyCommands(String commands, String key) {
+        MArrayList<String> keyCmds = new MArrayList<>();
+        String[] split = commands.split("\n");
+        for (String cmd : split) {
+            String[] split1 = cmd.split("\\[")[1].split("&");
+            String key1 = split1[1];
+            if (key.equals(key1)) {
+                keyCmds.add(cmd);
+            }
+        }
+        String[] keyCommands = new String[keyCmds.size()];
+        for (int i = 0; i < keyCmds.size(); i++) {
+            keyCommands[i] = keyCmds.get(i);
+        }
+        return keyCommands;
     }
 
     /**
@@ -134,11 +163,11 @@ public class LogAppendingStrategy implements PersistenceStrategy {
     /**
      * 处理命令数组
      *
-     * @param split 由换行符分隔的命令数组
+     * @param keyCommands 需操作的命令数组
      * @return 去除多余字符处理后的结果
      */
-    private String[] processCommands(String[] split) {
-        return Arrays.stream(split).
+    private String[] processCommands(String[] keyCommands) {
+        return Arrays.stream(keyCommands).
                 map(s -> s.substring(s.indexOf("]") + 2)).
                 toArray(String[]::new);
     }
@@ -147,18 +176,13 @@ public class LogAppendingStrategy implements PersistenceStrategy {
      * 将指令加载到缓存
      *
      * @param commandArray 存储指令的数组
-     * @return 返回执行完指令的数据
      */
-    private Data executeCmd(String[] commandArray) {
-        //创建Data对象作为执行指令的数据
-        Data data = new Data();
+    private void executeCmd(String[] commandArray) {
         //创建指令
-        CommandInvoker invoker = new CommandInvoker();
+        CommandInvoker invoker = CommandInvoker.getInstance();
         for (String cmd : commandArray) {
-            invoker.executeCommand(cmd, data, false);
+            invoker.executeCommand(cmd, false);
         }
-        isDataLoaded = true;
-        return data;
     }
 
 

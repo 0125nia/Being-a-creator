@@ -1,21 +1,19 @@
 package com.nia.command;
 
-import com.nia.pojo.Data;
-import com.nia.pojo.hashmap.MHashMap;
-
 /**
  * get [key]
  */
-public class GetCommand implements Command {
+public class GetCommand implements AbstractStringCommand {
     private static final int GET_CMD_NUM = 2;
 
     @Override
-    public String execute(String[] cmd, String cmdStr, Data data) {
-        if (!isCorrectCmd(cmd, GET_CMD_NUM)) {
-            return new ErrorCommand().execute(cmd, cmdStr, data);
-        }
+    public String handleCommand(String[] cmd, String cmdStr) {
         String key = cmd[1];
-        MHashMap<String, String> stringData = data.getStringData();
-        return stringData.get(key);
+        return getList(key);
+    }
+
+    @Override
+    public int getCmdNum() {
+        return GET_CMD_NUM;
     }
 }

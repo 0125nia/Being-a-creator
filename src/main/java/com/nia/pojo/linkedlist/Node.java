@@ -10,10 +10,6 @@ public class Node<T> {
     private T t;//当前结点元素
     private Node<T> next;//后一个结点
 
-    public Node() {
-        previous = null;
-        next = null;
-    }
 
     public Node(Node<T> previous, T t, Node<T> next) {
         this.previous = previous;

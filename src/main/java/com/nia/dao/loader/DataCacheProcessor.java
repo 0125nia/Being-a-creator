@@ -1,7 +1,9 @@
 package com.nia.dao.loader;
 
+import com.nia.dao.persistent.PersistenceContext;
+
 /**
- * 数据缓存加载器
+ * 数据缓存处理器
  */
 public class DataCacheProcessor {
 
@@ -25,7 +27,7 @@ public class DataCacheProcessor {
 
 
     /**
-     * 获取对应的缓存数据
+     * 获取对应的缓存数据,若缓存池中不存在,则读取持久化文件获取数据
      *
      * @param key 操作的键
      * @param <V> 缓存数据的泛型
@@ -33,7 +35,10 @@ public class DataCacheProcessor {
      * @throws NullPointerException 抛出异常交给具体命令类处理
      */
     public static <V> V get(String key) throws NullPointerException {
-        return cache.get(key);
+        if (cache.containKey(key)) {
+            return cache.get(key);
+        }
+        return PersistenceContext.loadData(key);
     }
 
 
@@ -52,6 +57,12 @@ public class DataCacheProcessor {
     //清空缓存
     public static void flush() {
         cache.clear();
+    }
+
+
+    //移除缓存池中key对应的数据
+    public static <V> V remove(String key) {
+        return cache.remove(key);
     }
 
 

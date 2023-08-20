@@ -1,14 +1,15 @@
 package com.nia.command;
 
-import com.nia.dao.persistent.PersistenceContext;
+import com.nia.dao.loader.DataCacheProcessor;
 import com.nia.pojo.ResponseMsg;
 
-public class BgSaveCommand implements Command {
-
-
+/**
+ * flushdb
+ */
+public class FlushDBCommand implements Command{
     @Override
     public String handleCommand(String[] cmd, String cmdStr) {
-        PersistenceContext.bgSaveData();
+        DataCacheProcessor.flush();
         return ResponseMsg.SUCCESS;
     }
 

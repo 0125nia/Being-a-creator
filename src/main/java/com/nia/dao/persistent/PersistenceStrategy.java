@@ -1,7 +1,5 @@
 package com.nia.dao.persistent;
 
-import com.nia.pojo.Data;
-
 /**
  * 抽象策略类
  */
@@ -9,7 +7,7 @@ public interface PersistenceStrategy {
 
     void save();
 
-    void load();
+    <V> void load(String key);
 
-    void appendCmd(String cmd);
+    void appendQueue(String cmd, byte sign);
 }

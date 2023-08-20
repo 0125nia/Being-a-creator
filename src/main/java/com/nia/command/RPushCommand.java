@@ -9,4 +9,5 @@ public class RPushCommand extends AbstractPushCommand {
         //在链表的右端添加元素
         linkedList.addLast(value);
     }
+
 }

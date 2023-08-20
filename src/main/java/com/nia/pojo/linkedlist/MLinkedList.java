@@ -161,15 +161,44 @@ public class MLinkedList<T> implements MList<T>, Iterable<T>, Serializable {
     public boolean remove(T t) {
         if (isEmpty())//判断是否为空
             return false;
-        Iterator<T> it = this.iterator();//获取迭代器对象
-        while (it.hasNext()) {
-            if (t.equals(it.next())) {//判断是否存在该元素
-                it.remove();//移除该元素
-                size--;//长度减少
-                return true;
+        if (t == null) {
+            for (Node<T> i = first; i != null; i = i.getNext()) {
+                if (i.getT() == null) {
+                    unlink(i);
+                    return true;
+                }
+            }
+        } else {
+            for (Node<T> x = first; x != null; x = x.getNext()) {
+                if (t.equals(x.getT())) {
+                    unlink(x);
+                    return true;
+                }
             }
         }
         return false;
+    }
+
+    private void unlink(Node<T> x) {
+        final Node<T> next = x.getNext();
+        final Node<T> prev = x.getPrevious();
+
+        if (prev == null) {
+            first = next;
+        } else {
+            prev.setNext(next);
+            x.setPrevious(null);
+        }
+
+        if (next == null) {
+            last = prev;
+        } else {
+            next.setPrevious(prev);
+            x.setNext(next);
+        }
+
+        x.setT(null);
+        size--;
     }
 
     /**

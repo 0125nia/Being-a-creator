@@ -2,6 +2,10 @@
 .iml
 .bak
 
+# Date persistence file
+*.txt
+*.bin
+
 # Compiled class file
 *.class
 
