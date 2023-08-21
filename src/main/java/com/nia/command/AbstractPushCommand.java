@@ -22,6 +22,7 @@ public abstract class AbstractPushCommand implements AbstractLinkedListCommand {
         pushToList(linkedList, value);
         //修改数据到持久化策略类中
         PersistenceContext.appendToStrategy(cmdStr, PersistentDataIdentifier.LINKEDLIST_DATA);
+        System.out.println("111");
         //返回信息
         return ResponseMsg.SUCCESS;
     }

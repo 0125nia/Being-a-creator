@@ -12,6 +12,10 @@ public interface AbstractHashMapCommand extends Command {
      * @return 对应的映射数据
      */
     default MHashMap<String, String> getHashMap(String key) {
+        MHashMap<String, String> map = DataCacheProcessor.get(key);
+        if (map == null) {
+            DataCacheProcessor.<MHashMap<String, String>>put(key, new MHashMap<>());
+        }
         return DataCacheProcessor.get(key);
     }
 }

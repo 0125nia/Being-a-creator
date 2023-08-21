@@ -1,6 +1,7 @@
 package com.nia.reactor;
 
 import com.nia.dao.loader.ConfigLoader;
+import com.nia.dao.persistent.PersistenceContext;
 import com.nia.handler.ServerAcceptor;
 import com.nia.handler.ServerReader;
 import com.nia.handler.ServerWriter;
@@ -23,6 +24,7 @@ public class Reactor {
     //定义通道和选择器
     private Selector selector;
     private ServerSocketChannel serverSocketChannel;
+    public static ThreadDistributor threadDistributor = new ThreadDistributor();
 
     private static Reactor instance;  // 私有静态成员变量，用于保存单例对象
     //构造器私有
@@ -63,6 +65,9 @@ public class Reactor {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        TimingSave timingSave = new TimingSave();
+        timingSave.start();
+        threadDistributor.start();
         LOGGER.info("服务端初始化完毕");
     }
 
@@ -102,6 +107,10 @@ public class Reactor {
      */
     public void stop() {
         try {
+            //保存数据
+            PersistenceContext.bgSaveData();
+            //关闭线程池
+            threadDistributor.close();
             //关闭服务端
             serverSocketChannel.close();
             selector.close();

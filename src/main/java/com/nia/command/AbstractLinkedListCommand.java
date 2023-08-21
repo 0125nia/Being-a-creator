@@ -12,6 +12,10 @@ public interface AbstractLinkedListCommand extends Command {
      * @return 返回key对应的链表
      */
     default MLinkedList<String> getLinkedList(String key) {
+        MLinkedList<String> list = DataCacheProcessor.get(key);
+        if (list == null){
+            DataCacheProcessor.<MLinkedList<String>>put(key,new MLinkedList<>());
+        }
         return DataCacheProcessor.get(key);
     }
 }

@@ -30,7 +30,7 @@ public class LogAppendingStrategy implements PersistenceStrategy {
     /**
      * 将新的指令存放到集合中
      *
-     * @param cmd 追加的指令
+     * @param cmd  追加的指令
      * @param sign 数据类型标识
      */
     @Override
@@ -49,7 +49,6 @@ public class LogAppendingStrategy implements PersistenceStrategy {
         } else {
             list.add(cmd);
         }
-
     }
 
 
@@ -91,17 +90,21 @@ public class LogAppendingStrategy implements PersistenceStrategy {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Reactor.LOGGER.info("save data");//将save操作写入日志
     }
 
 
     @Override
-    public <V> void load(String key) {
+    public boolean load(String key) {
         //存放日志文件内容的字符串
         //判断文件是否存在
         if (!Files.exists(path)) {
-            //若不存在则直接抛出空指针异常
-            throw new NullPointerException();
+            //若不存在则新建并直接返回
+            try {
+                Files.createFile(path);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return false;
         }
         //获取FileChannel
         try (FileChannel channel = FileChannel.open(path, StandardOpenOption.READ, StandardOpenOption.CREATE)) {
@@ -110,14 +113,20 @@ public class LogAppendingStrategy implements PersistenceStrategy {
             //判断读取的字符串是否只含有空格或为空
             if (!commands.trim().isEmpty()) {
                 String[] keyCommands = getKeyCommands(commands, key);
+                if (keyCommands.length == 0){
+                    return false;
+                }
                 //使用Stream流对数据中的数据进行处理
                 String[] commandArray = processCommands(keyCommands);
                 //写入缓存
                 executeCmd(commandArray);
+                return true;
             }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return false;
     }
 
     private String[] getKeyCommands(String commands, String key) {

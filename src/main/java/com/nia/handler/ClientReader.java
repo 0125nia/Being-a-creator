@@ -5,6 +5,7 @@ import com.nia.dao.loader.ConfigLoader;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.util.Scanner;
 
@@ -22,9 +23,14 @@ public class ClientReader implements Handler {
     public void handle(SelectionKey sk) throws IOException {
         SocketChannel channel = (SocketChannel) sk.channel();
         read(channel);
-        write2Server(channel);
-        // 继续发送更多请求
-        channel.register(sk.selector(), SelectionKey.OP_READ);
+        boolean b = write2Server(channel);
+        if (b){
+            // 继续发送更多请求
+            channel.register(sk.selector(), SelectionKey.OP_READ);
+        }else {
+            close(channel,sk.selector());
+        }
+
     }
 
     private void read(SocketChannel socketChannel) throws IOException {
@@ -39,12 +45,31 @@ public class ClientReader implements Handler {
         }
     }
 
-    private void write2Server(SocketChannel channel) throws IOException{
+    private boolean write2Server(SocketChannel channel) throws IOException{
         Scanner sc = new Scanner(System.in);
         String msg = sc.nextLine();
+        if ("exit".equals(msg)){
+            return false;
+        }
         ByteBuffer buffer = ByteBuffer.wrap(msg.getBytes());
         channel.write(buffer);
         buffer.clear();
+        return true;
     }
 
+    private void close(SocketChannel socketChannel, Selector selector) {
+        try {
+            if (socketChannel != null && socketChannel.isOpen()) {
+                socketChannel.close();
+            }
+
+            if (selector != null && selector.isOpen()) {
+                selector.close();
+            }
+
+            System.out.println("连接已关闭");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

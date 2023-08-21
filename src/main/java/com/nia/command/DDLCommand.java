@@ -17,7 +17,7 @@ public class DDLCommand implements Command{
         try {
             ddl = DataCacheProcessor.ddl(key);
         } catch (NullPointerException e) {
-            return ResponseMsg.NULL_DATA;
+            return null;
         }
         return String.valueOf(ddl/1000);
     }

@@ -1,5 +1,6 @@
 package com.nia.command;
 
+import com.nia.dao.loader.DataCacheProcessor;
 import com.nia.dao.persistent.PersistenceContext;
 import com.nia.pojo.PersistentDataIdentifier;
 import com.nia.pojo.hashmap.MHashMap;
@@ -14,8 +15,8 @@ public class DelCommand implements AbstractStringCommand {
     @Override
     public String handleCommand(String[] cmd, String cmdStr) {
         String key = cmd[1];
-        MHashMap<String, String> stringData = new MHashMap<>();
-        String remove = stringData.remove(key);
+        String remove = DataCacheProcessor.remove(key);
+        System.out.println(remove);
         //修改数据到持久化策略类中
         PersistenceContext.appendToStrategy(cmdStr, PersistentDataIdentifier.STRING_DATA);
         //返回成功数据

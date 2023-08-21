@@ -10,6 +10,9 @@ public class PersistenceContext {
     //定义静态策略类常量
     private static final PersistenceStrategy PERSISTENCESTRATEGY;
 
+    public static PersistenceStrategy getPERSISTENCESTRATEGY() {
+        return PERSISTENCESTRATEGY;
+    }
 
     //静态代码块,判断持久化类型
     static {
@@ -29,21 +32,26 @@ public class PersistenceContext {
 
     public static void saveData() {
         PERSISTENCESTRATEGY.save();
+        Reactor.LOGGER.info("save data");//将save操作写入日志
     }
 
     //读取数据写入缓存
-    public static<V> V loadData(String key) {
+    public static boolean loadData(String key) {
         Reactor.LOGGER.info("load data");//加载数据
-//        return PERSISTENCESTRATEGY.load();
-        return null;
+        return PERSISTENCESTRATEGY.load(key);
     }
 
     public static void appendToStrategy(String cmd, byte sign) {
         PERSISTENCESTRATEGY.appendQueue(cmd, sign);
     }
 
+    /**
+     * 异步持久化数据
+     */
     public static void bgSaveData() {
-        new Thread(PERSISTENCESTRATEGY::save).start();
+        Runnable runnable = PERSISTENCESTRATEGY::save;//创建Runnable对象
+        //线程池分发线程处理
+        Reactor.threadDistributor.distribute(runnable);
         Reactor.LOGGER.info("bgsave data");//将bgsave操作写入日志
     }
 }

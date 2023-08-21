@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
@@ -29,6 +31,8 @@ public class BinaryStrategy implements PersistenceStrategy {
         for (MMap.MEntry<String, byte[]> entry : binaryDataMap) {
             String key = entry.getKey();
             byte[] value = entry.getValue();
+            byte[] bytes1 = key.getBytes(StandardCharsets.UTF_8);
+
         }
 
         //写入文件
@@ -48,8 +52,19 @@ public class BinaryStrategy implements PersistenceStrategy {
 
 
     @Override
-    public <V> void load(String key) {
-
+    public <V> boolean load(String key) {
+        //判断文件是否存在
+        if (!Files.exists(path)) {
+            //若不存在则新建并直接返回
+            try {
+                Files.createFile(path);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return false;
+        }
+        
+        return false;
 
     }
 
@@ -78,9 +93,8 @@ public class BinaryStrategy implements PersistenceStrategy {
             return binaryData;
 
         } catch (IOException e) {
-            e.printStackTrace();
+            return null;
         }
-        return null;
     }
 
 

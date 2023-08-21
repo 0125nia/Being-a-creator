@@ -115,7 +115,7 @@ public class Cache {
     //移除key
     public <V> V remove(String key) {
         CacheObject<?> remove = cacheMap.remove(key);
-        return (V) remove;
+        return (V) remove.getValue();
     }
 
     //判断是否含有该key

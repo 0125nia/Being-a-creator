@@ -1,6 +1,7 @@
 package com.nia.dao.loader;
 
 import com.nia.dao.persistent.PersistenceContext;
+import com.nia.reactor.Reactor;
 
 /**
  * 数据缓存处理器
@@ -8,6 +9,7 @@ import com.nia.dao.persistent.PersistenceContext;
 public class DataCacheProcessor {
 
     private static Cache cache = Cache.getInstance();//获取缓存池实例
+    private static final String FLUSH_TYPE = ConfigLoader.getString("flush");
 
     //私有化构造器
     private DataCacheProcessor() {
@@ -31,14 +33,17 @@ public class DataCacheProcessor {
      *
      * @param key 操作的键
      * @param <V> 缓存数据的泛型
-     * @return 返回缓存数据
+     * @return 返回数据
      * @throws NullPointerException 抛出异常交给具体命令类处理
      */
     public static <V> V get(String key) throws NullPointerException {
-        if (cache.containKey(key)) {
-            return cache.get(key);
+        if (!cache.containKey(key)){
+            boolean b = PersistenceContext.loadData(key);
+            if (!b){
+                return null;
+            }
         }
-        return PersistenceContext.loadData(key);
+        return cache.get(key);
     }
 
 
@@ -56,13 +61,26 @@ public class DataCacheProcessor {
 
     //清空缓存
     public static void flush() {
-        cache.clear();
+        if (FLUSH_TYPE.equals("async")){
+            asyncFlush();
+        }else {
+            cache.clear();
+            Reactor.LOGGER.info("sync flush cache");
+        }
+    }
+    private static void asyncFlush(){
+        Runnable runnable = cache::clear;//创建Runnable对象
+        //线程池分发线程处理
+        Reactor.threadDistributor.distribute(runnable);
+        Reactor.LOGGER.info("async flush cache");
     }
 
 
     //移除缓存池中key对应的数据
     public static <V> V remove(String key) {
-        return cache.remove(key);
+        V remove = cache.remove(key);
+        PersistenceContext.bgSaveData();//异步存储数据
+        return remove;
     }
 
 

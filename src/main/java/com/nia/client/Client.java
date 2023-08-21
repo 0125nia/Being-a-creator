@@ -49,21 +49,7 @@ public class Client {
         }
     }
 
-    public void close() {
-        try {
-            if (socketChannel != null && socketChannel.isOpen()) {
-                socketChannel.close();
-            }
 
-            if (selector != null && selector.isOpen()) {
-                selector.close();
-            }
-
-            System.out.println("连接已关闭");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
 
 }

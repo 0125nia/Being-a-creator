@@ -9,11 +9,9 @@ public class DataBase {
     public static void main(String[] args) {
         //创建Reactor
         Reactor reactor = Reactor.getInstance();
+        //注册钩子函数
+        Runtime.getRuntime().addShutdownHook(new Thread(reactor::stop));
         //开启Reactor
         reactor.start();
-
-        // 在关闭钩子中停止服务器
-        Runtime.getRuntime().addShutdownHook(new Thread(reactor::stop));
-
     }
 }

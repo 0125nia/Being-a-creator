@@ -31,7 +31,7 @@ public class ServerWriter implements Handler {
 
         resp = invoker.executeCommand(msg,true);
         if (resp == null){
-            resp = ResponseMsg.NULL_DATA;
+            resp = "null";
         }
         socketChannel.write(ByteBuffer.wrap(resp.getBytes(StandardCharsets.UTF_8)));
 
