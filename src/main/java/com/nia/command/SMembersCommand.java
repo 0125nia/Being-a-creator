@@ -14,7 +14,7 @@ public class SMembersCommand implements AbstractArrayListCommand{
         MArrayList<String> arrayList = getArrayList(key);
         StringBuilder sb = new StringBuilder();
         for (String s : arrayList) {
-            sb.append(s);
+            sb.append(s).append(" ");
         }
         return sb.toString();
     }

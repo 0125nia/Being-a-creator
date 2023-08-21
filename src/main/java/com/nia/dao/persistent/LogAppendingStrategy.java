@@ -133,7 +133,7 @@ public class LogAppendingStrategy implements PersistenceStrategy {
         MArrayList<String> keyCmds = new MArrayList<>();
         String[] split = commands.split("\n");
         for (String cmd : split) {
-            String[] split1 = cmd.split("\\[")[1].split("&");
+            String[] split1 = cmd.split("\\[")[0].split("\\$");
             String key1 = split1[1];
             if (key.equals(key1)) {
                 keyCmds.add(cmd);
