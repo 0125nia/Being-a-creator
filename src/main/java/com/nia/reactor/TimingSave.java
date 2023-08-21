@@ -17,7 +17,6 @@ public class TimingSave {
     }
 
     public void start(){
-        System.out.println(isOpen);
         if (isOpen){
             timing();
         }

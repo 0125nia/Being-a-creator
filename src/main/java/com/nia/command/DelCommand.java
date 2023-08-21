@@ -3,7 +3,6 @@ package com.nia.command;
 import com.nia.dao.loader.DataCacheProcessor;
 import com.nia.dao.persistent.PersistenceContext;
 import com.nia.pojo.PersistentDataIdentifier;
-import com.nia.pojo.hashmap.MHashMap;
 
 /**
  * del [key]

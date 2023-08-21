@@ -6,7 +6,7 @@ import com.nia.pojo.ResponseMsg;
 import com.nia.pojo.hashmap.MHashMap;
 
 /**
- * hset [field] [key] [value]
+ * hset [key] [field] [value]
  */
 public class HSetCommand implements AbstractHashMapCommand {
     private static final int HSET_CMD_NUM = 4;

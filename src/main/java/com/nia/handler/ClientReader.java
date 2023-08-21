@@ -47,6 +47,7 @@ public class ClientReader implements Handler {
 
     private boolean write2Server(SocketChannel channel) throws IOException{
         Scanner sc = new Scanner(System.in);
+        System.out.print(">");
         String msg = sc.nextLine();
         if ("exit".equals(msg)){
             return false;
